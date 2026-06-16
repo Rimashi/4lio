@@ -18,13 +18,13 @@
         </form>
     </div>
 
-    {% if records %}
+    {% if grouped %}
         <div class="history-groups">
-            {% for group in records|groupby('viewed_at.strftime(%d.%m.%Y)') %}
+            {% for group in grouped %}
             <div class="history-group">
-                <h2 class="history-group__date">{{ group.grouper }}</h2>
+                <h2 class="history-group__date">{{ group.date }}</h2>
                 <div class="history-list">
-                    {% for record in group.list %}
+                    {% for record in group.records %}
                     <a href="{{ url_for('books.book', book_id=record.book.id) }}" class="history-item">
                         <div class="history-item__cover"></div>
                         <div class="history-item__info">

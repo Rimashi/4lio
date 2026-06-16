@@ -1,23 +1,31 @@
 import csv
 from datetime import datetime
 from io import StringIO
+from itertools import groupby
 
 from flask import Blueprint, Response, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import desc, func
 
 from app.extensions import db
-from app.models import Book, ViewHistory
+from app.models import Book, Collection, Review, ViewHistory
 from app.utils.decorators import admin_required
 
 profile_bp = Blueprint("profile", __name__, url_prefix="/profile")
 
 
-@profile_bp.route("/")
+@profile_bp.route('/')
 @login_required
 def profile():
-    return render_template("profile/profile.html")
-
+    reviews_count = current_user.reviews.count()
+    collections_count = current_user.collections.count()
+    recent_reviews = current_user.reviews.order_by(Review.created_at.desc()).limit(5).all()
+    recent_collections = current_user.collections.order_by(Collection.id.desc()).limit(5).all()
+    return render_template("profile/profile.html",
+                           reviews_count=reviews_count,
+                           collections_count=collections_count,
+                           recent_reviews=recent_reviews,
+                           recent_collections=recent_collections)
 
 @profile_bp.route("/edit", methods=["POST"])
 @login_required
@@ -58,11 +66,18 @@ def change_password():
     return redirect(url_for("profile.profile"))
 
 
-@profile_bp.route("/history")
+@profile_bp.route('/history')
 @login_required
 def history():
     records = ViewHistory.query.filter_by(user_id=current_user.id).order_by(ViewHistory.viewed_at.desc()).all()
-    return render_template("profile/history.html", records=records)
+    # Группируем по дате в Python
+    grouped = []
+    for date_str, group in groupby(records, key=lambda r: r.viewed_at.strftime('%d.%m.%Y')):
+        grouped.append({
+            'date': date_str,
+            'records': list(group)
+        })
+    return render_template("profile/history.html", grouped=grouped)
 
 
 @profile_bp.route("/history/clear", methods=["POST"])

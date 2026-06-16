@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+env/
+.venv/
+ENV/
+
+# Flask
+instance/
+.webassets-cache
+.env
+.flaskenv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# База данных
+# database.sql
+# database-schema.sql
+
+# Uploads (обложки)
+static/uploads/*
+
+# Миграции
+# migrations/
+
+# Логи
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Рабочие файлы
+*.pid
+*.seed

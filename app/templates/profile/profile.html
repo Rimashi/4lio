@@ -11,8 +11,8 @@
             <h1 class="profile-name">{{ current_user.full_name }}</h1>
             <span class="badge badge-muted profile-role">{{ current_user.role.name }}</span>
             <div class="profile-stats">
-                <div class="profile-stat"><span class="profile-stat__val">{{ current_user.reviews|length }}</span><span class="profile-stat__label">рецензий</span></div>
-                <div class="profile-stat"><span class="profile-stat__val">{{ current_user.collections|length }}</span><span class="profile-stat__label">подборки</span></div>
+                <div class="profile-stat"><span class="profile-stat__val">{{ reviews_count }}</span><span class="profile-stat__label">рецензий</span></div>
+                <div class="profile-stat"><span class="profile-stat__val">{{ collections_count }}</span><span class="profile-stat__label">подборки</span></div>
                 <div class="profile-stat"><span class="profile-stat__val">—</span><span class="profile-stat__label">ср. оценка</span></div>
             </div>
             <div class="profile-sidebar__actions">
@@ -22,7 +22,7 @@
         </aside>
 
         <div class="profile-content">
-            <!-- Форма редактирования -->
+            <!-- Форма редактирования (скрыта) -->
             <div class="profile-edit-form" id="profileEditForm" hidden>
                 <div class="form-card">
                     <h2 style="font-size:16px;font-weight:600;margin-bottom:20px;border-bottom:1px solid var(--border-light);padding-bottom:12px;">Редактирование профиля</h2>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <!-- Форма смены пароля -->
+            <!-- Форма смены пароля (скрыта) -->
             <div class="profile-password-form" id="profilePasswordForm" hidden>
                 <div class="form-card">
                     <h2 style="font-size:16px;font-weight:600;margin-bottom:20px;border-bottom:1px solid var(--border-light);padding-bottom:12px;">Смена пароля</h2>
@@ -63,7 +63,7 @@
                     <a href="{{ url_for('reviews.my_reviews') }}" class="btn btn-ghost btn-sm">Все рецензии</a>
                 </div>
                 <div class="profile-reviews">
-                    {% for review in current_user.reviews[:3] %}
+                    {% for review in recent_reviews %}
                     <div class="profile-review">
                         <a href="{{ url_for('books.book', book_id=review.book.id) }}" class="profile-review__cover"></a>
                         <div class="profile-review__body">
@@ -89,7 +89,7 @@
                     <a href="{{ url_for('collections.my_collections') }}" class="btn btn-ghost btn-sm">Все подборки</a>
                 </div>
                 <div class="profile-collections">
-                    {% for col in current_user.collections[:3] %}
+                    {% for col in recent_collections %}
                     <a href="{{ url_for('collections.collection', col_id=col.id) }}" class="profile-collection">
                         <span class="profile-collection__name">{{ col.name }}</span>
                         <span class="profile-collection__count">{{ col.books|length }} книг</span>
