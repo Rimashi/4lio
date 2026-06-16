@@ -1,0 +1,780 @@
+/* ================================================
+   Reset + CSS переменные + базовые стили
+   ================================================ */
+
+/* ----------------ОБНУЛЕНИЕ---------------- */
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+html,
+body {
+  height: 100%;
+  line-height: 1.5;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "Montserrat", Arial, sans-serif;
+  scroll-behavior: smooth;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ----------------СВЕТЛАЯ ТЕМА---------------- */
+:root {
+  /* Фоны */
+  --bg-color: #fff8f0;
+  --block-bg: #ffffff;
+  --surface: #fff3e6;
+  --surface-hover: #ffe8cc;
+  --header-bg: #ffffff;
+  --footer-bg: #2c2c2a;
+  --footer-text: #fff8f0;
+
+  /* Текст */
+  --text-color: #2c2c2a;
+  --text-muted: #888780;
+  --text-light: #b4b2a9;
+
+  /* Акцент (Amber) */
+  --accent-color: #ef9f27;
+  --accent-hover: #854f0b;
+  --accent-bg: #faeeda;
+  --accent-text: #633806;
+
+  /* Интерфейс */
+  --border-color: #d3d1c7;
+  --border-light: #eae8e0;
+  --shadow-color: rgba(44, 44, 42, 0.08);
+  --shadow-md: 0 4px 16px rgba(44, 44, 42, 0.1);
+
+  /* Статусы */
+  --success-bg: #e8f5e9;
+  --success-text: #2e7d32;
+  --danger-bg: #ffebee;
+  --danger-text: #c62828;
+  --info-bg: #e3f2fd;
+  --info-text: #1565c0;
+  --warning-bg: #faeeda;
+  --warning-text: #633806;
+
+  /* Рецензии — звёзды */
+  --star-color: #ef9f27;
+  --star-empty: #d3d1c7;
+
+  /* Лейаут */
+  --container: 1600px;
+  --header-height: 64px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 22px;
+}
+
+/* ----------------ТЁМНАЯ ТЕМА---------------- */
+.dark-theme {
+  /* Фоны */
+  --bg-color: #121212;
+  --block-bg: #1e1e1e;
+  --surface: #252525;
+  --surface-hover: #2e2e2e;
+  --header-bg: #1a1a1a;
+  --footer-bg: #0a0a0a;
+  --footer-text: #f5e8e0;
+
+  /* Текст */
+  --text-color: #f5e8e0;
+  --text-muted: #9e9e9e;
+  --text-light: #666666;
+
+  /* Акцент (Coral/оранжево-красный) */
+  --accent-color: #d85a30;
+  --accent-hover: #f0997b;
+  --accent-bg: #2a1810;
+  --accent-text: #f0997b;
+
+  /* Интерфейс */
+  --border-color: #333333;
+  --border-light: #2a2a2a;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  /* Статусы */
+  --success-bg: #0d2e10;
+  --success-text: #66bb6a;
+  --danger-bg: #2e0d0d;
+  --danger-text: #ef9a9a;
+  --info-bg: #0d1e2e;
+  --info-text: #90caf9;
+  --warning-bg: #2a1810;
+  --warning-text: #f0997b;
+
+  /* Рецензии — звёзды */
+  --star-color: #d85a30;
+  --star-empty: #333333;
+}
+
+/* ----------------ЛЕЙАУТ---------------- */
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+}
+
+._container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.main {
+  flex: 1 1 auto;
+  padding: 32px 0;
+}
+
+/* ----------------ТИПОГРАФИКА---------------- */
+.title-xl {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.title-lg {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.3;
+}
+
+.title-md {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.title-sm {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ----------------КНОПКИ---------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.1s ease;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--accent-bg);
+  color: var(--accent-hover);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+.btn-ghost:hover {
+  background-color: var(--surface);
+  color: var(--text-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  border-color: var(--danger-text);
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-text);
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 13px;
+}
+
+.btn-lg {
+  padding: 12px 28px;
+  font-size: 16px;
+}
+
+.btn-icon {
+  padding: 7px;
+  border-radius: var(--radius-sm);
+}
+
+/* ----------------FLASH-СООБЩЕНИЯ---------------- */
+.flash-messages {
+  position: fixed;
+  top: calc(var(--header-height) + 12px);
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 380px;
+  width: 100%;
+}
+
+.flash {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  animation: flashIn 0.25s ease;
+  cursor: pointer;
+}
+
+.flash-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-text);
+}
+
+.flash-danger,
+.flash-error {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-text);
+}
+
+.flash-info {
+  background-color: var(--info-bg);
+  color: var(--info-text);
+  border: 1px solid var(--info-text);
+}
+
+.flash-warning {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-text);
+}
+
+@keyframes flashIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ----------------БЕЙДЖИ / ТЕГИ---------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-accent {
+  background-color: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.badge-muted {
+  background-color: var(--surface);
+  color: var(--text-muted);
+}
+
+.badge-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+.badge-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+/* ----------------ЗВЁЗДЫ (рейтинг)---------------- */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--star-color);
+  font-size: 14px;
+}
+
+.stars .empty {
+  color: var(--star-empty);
+}
+
+/* ----------------ПАГИНАЦИЯ---------------- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.page-item {
+  display: inline-flex;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-color);
+  background: var(--block-bg);
+  transition: all 0.2s ease;
+}
+
+.page-link:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--accent-bg);
+}
+
+.page-item.active .page-link {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ----------------МОДАЛЬНОЕ ОКНО---------------- */
+.modal__background {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal__background.active {
+  display: flex;
+}
+
+.modal__window {
+  background: var(--block-bg);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+.modal__body {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.modal__close:hover {
+  color: var(--text-color);
+}
+
+/* ----------------ФОРМЫ---------------- */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 6px;
+}
+
+.form-label span.required {
+  color: var(--danger-text);
+  margin-left: 2px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--block-bg);
+  color: var(--text-color);
+  font-size: 15px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  appearance: none;
+}
+
+.form-control option {
+  background: var(--block-bg);
+  color: var(--text-color);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(239, 159, 39, 0.15);
+}
+
+.dark-theme .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(216, 90, 48, 0.2);
+}
+
+.form-control::placeholder {
+  color: var(--text-light);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+.form-error {
+  font-size: 12px;
+  color: var(--danger-text);
+  margin-top: 4px;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ----------------КАРТОЧКА КНИГИ (общая)---------------- */
+.book-card {
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.book-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.book-card__cover {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-card__cover-placeholder {
+  width: 100%;
+  aspect-ratio: 2/3;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  font-size: 40px;
+}
+
+/* ----------------РАЗДЕЛИТЕЛЬ---------------- */
+.divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 24px 0;
+}
+
+/* ----------------СКЕЛЕТОН (загрузка)---------------- */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-hover) 50%,
+    var(--surface) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ----------------БУРГЕР-МЕНЮ (мобильный)---------------- */
+.menu__icon {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: transparent;
+}
+
+.menu__icon span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.menu__icon.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu__icon.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu__icon.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+#menu_overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+}
+
+#menu_overlay.active {
+  display: block;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+/* ----------------УТИЛИТЫ---------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.d-flex {
+  display: flex;
+}
+.align-center {
+  align-items: center;
+}
+.gap-8 {
+  gap: 8px;
+}
+.gap-12 {
+  gap: 12px;
+}
+.gap-16 {
+  gap: 16px;
+}
+.mt-8 {
+  margin-top: 8px;
+}
+.mt-16 {
+  margin-top: 16px;
+}
+.mt-24 {
+  margin-top: 24px;
+}
+.mt-32 {
+  margin-top: 32px;
+}
+.mb-8 {
+  margin-bottom: 8px;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+.mb-24 {
+  margin-bottom: 24px;
+}
+.mb-32 {
+  margin-bottom: 32px;
+}
+
+/* ----------------АДАПТИВ---------------- */
+@media (max-width: 768px) {
+  .menu__icon {
+    display: flex;
+  }
+
+  .main {
+    padding: 20px 0;
+  }
+}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Мои подборки{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/collections.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <div class="page-head">
+        <h1 class="title-xl">Мои подборки</h1>
+        <button class="btn btn-primary" id="btnNewCollection">+ Новая подборка</button>
+    </div>
+
+    <div class="collections-grid">
+        {% for col in collections %}
+        <div class="collection-card">
+            <div class="collection-card__head">
+                <h2 class="collection-card__title">{{ col.name }}</h2>
+                <span class="collection-card__count">{{ col.books|length }} книг</span>
+            </div>
+            <div class="collection-card__books">
+                {% for book in col.books[:4] %}
+                    <div class="collection-book-cover"></div>
+                {% endfor %}
+                {% if col.books|length > 4 %}
+                    <div class="collection-book-cover collection-book-cover--more">+{{ col.books|length - 4 }}</div>
+                {% endif %}
+            </div>
+            <div class="collection-card__footer">
+                <a href="{{ url_for('collections.collection', col_id=col.id) }}" class="btn btn-outline btn-sm">Открыть</a>
+                <button class="btn btn-ghost btn-sm btn-icon btn-danger-hover" title="Удалить подборку" data-collection-id="{{ col.id }}" data-collection-name="{{ col.name }}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">У вас ещё нет подборок. Создайте первую!</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Модалка новой подборки -->
+<div class="modal__background" id="newCollectionModal">
+    <div class="modal__window">
+        <button class="modal__close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <h2 class="modal__title">Новая подборка</h2>
+        <form method="post" action="{{ url_for('collections.create_collection') }}">
+            <div class="modal__body">
+                <div class="form-group">
+                    <label class="form-label" for="newCollectionName">Название <span class="required">*</span></label>
+                    <input class="form-control" type="text" id="newCollectionName" name="name" placeholder="Например: Любимые детективы" required>
+                    <p class="form-error" id="newCollectionNameError" hidden>Введите название подборки</p>
+                </div>
+            </div>
+            <div class="modal__actions">
+                <button type="button" class="btn btn-ghost modal__close-btn">Отмена</button>
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модалка удаления подборки -->
+<div class="modal__background" id="deleteCollectionModal">
+    <div class="modal__window">
+        <button class="modal__close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <h2 class="modal__title">Удаление подборки</h2>
+        <p class="modal__body" id="deleteCollectionText">Удалить подборку?</p>
+        <form method="post" id="deleteCollectionForm" action="#">
+            <div class="modal__actions">
+                <button type="button" class="btn btn-ghost modal__close-btn">Отмена</button>
+                <button type="submit" class="btn btn-danger">Удалить</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/collections.js') }}"></script>
+{% endblock %}

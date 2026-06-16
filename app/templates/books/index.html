@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% from 'macros/book_card.html' import book_card with context %}
+{% block title %}Каталог книг{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="_container">
+    {% if recently %}
+    <section class="recently-viewed">
+        <div class="section-head">
+            <h2 class="section-head__title">Недавно просмотренные</h2>
+            <a href="{{ url_for('profile.history') }}" class="btn btn-ghost btn-sm">История</a>
+        </div>
+        <div class="recently-list">
+            {% for record in recently %}
+            <a href="{{ url_for('books.book', book_id=record.book.id) }}" class="recently-item">
+                <div class="recently-item__cover"></div>
+                <div class="recently-item__info">
+                    <p class="recently-item__title">{{ record.book.title }}</p>
+                    <p class="recently-item__meta">{{ record.viewed_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="popular-books">
+        <div class="section-head">
+            <h2 class="section-head__title">Популярные <span class="section-head__badge">за месяц</span></h2>
+        </div>
+        <div class="popular-list">
+            {% for book, views in popular %}
+            <a href="{{ url_for('books.book', book_id=book.id) }}" class="popular-item">
+                <span class="popular-item__rank">{{ loop.index }}</span>
+                <div class="popular-item__cover"></div>
+                <div class="popular-item__info">
+                    <p class="popular-item__title">{{ book.title }}</p>
+                    <p class="popular-item__meta">{{ views }} просмотров</p>
+                </div>
+                <span class="stars popular-item__stars">
+                    {% for i in range(5) %}{% if i < (book.avg_rating|int|default(0)) %}★{% else %}☆{% endif %}{% endfor %}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="catalog__head">
+        <h1 class="title-xl">Каталог книг</h1>
+        {% if current_user.is_authenticated and current_user.role.name == 'Администратор' %}
+            <a href="{{ url_for('books.book_add') }}" class="btn btn-primary">+ Добавить книгу</a>
+        {% endif %}
+    </div>
+
+    <form class="catalog-filter" method="get" action="{{ url_for('main.index') }}">
+        <div class="catalog-filter__fields">
+            <div class="catalog-filter__field">
+                <label class="catalog-filter__label" for="filterTitle">Название</label>
+                <input class="form-control catalog-filter__input" type="text" id="filterTitle" name="title" value="{{ filters.title|default('') }}">
+            </div>
+            <div class="catalog-filter__field">
+                <label class="catalog-filter__label" for="filterAuthor">Автор</label>
+                <input class="form-control catalog-filter__input" type="text" id="filterAuthor" name="author" value="{{ filters.author|default('') }}">
+            </div>
+            <div class="catalog-filter__field">
+                <label class="catalog-filter__label" for="filterGenre">Жанр</label>
+                <select class="form-control catalog-filter__input" id="filterGenre" name="genre">
+                    <option value="">Все жанры</option>
+                    {% for g in genres %}
+                        <option value="{{ g.id }}" {% if filters.genre == g.id %}selected{% endif %}>{{ g.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="catalog-filter__field">
+                <label class="catalog-filter__label" for="filterYear">Год</label>
+                <select class="form-control catalog-filter__input" id="filterYear" name="year">
+                    <option value="">Все годы</option>
+                    {% for y in years %}
+                        <option value="{{ y }}" {% if filters.year == y %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="catalog-filter__range">
+                <label class="catalog-filter__label">Страниц</label>
+                <div class="catalog-filter__range-inputs">
+                    <input class="form-control catalog-filter__input" type="number" id="filterPagesFrom" name="pages_from" placeholder="от" value="{{ filters.pages_from or '' }}">
+                    <span class="catalog-filter__range-sep">—</span>
+                    <input class="form-control catalog-filter__input" type="number" id="filterPagesTo" name="pages_to" placeholder="до" value="{{ filters.pages_to or '' }}">
+                </div>
+            </div>
+        </div>
+        <div class="catalog-filter__actions">
+            <button type="submit" class="btn btn-primary">Найти</button>
+            <a href="{{ url_for('main.index') }}" class="btn btn-ghost">Сбросить</a>
+        </div>
+    </form>
+
+    <div class="catalog__grid" id="booksGrid">
+        {% for book in books %}
+            {% from 'macros/book_card.html' import book_card %}
+            {{ book_card(book, show_actions=true) }}
+        {% else %}
+            <div class="search-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <p>Ничего не найдено</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <nav class="pagination" id="pagination">
+        {% if pagination.has_prev %}
+            <a class="page-link" href="{{ url_for('main.index', page=pagination.prev_num, title=filters.title, author=filters.author, genre=filters.genre, year=filters.year, pages_from=filters.pages_from, pages_to=filters.pages_to) }}">‹</a>
+        {% else %}
+            <span class="page-link disabled">‹</span>
+        {% endif %}
+        {% for p in pagination.iter_pages() %}
+            {% if p %}
+                {% if p == pagination.page %}
+                    <span class="page-link active">{{ p }}</span>
+                {% else %}
+                    <a class="page-link" href="{{ url_for('main.index', page=p, title=filters.title, author=filters.author, genre=filters.genre, year=filters.year, pages_from=filters.pages_from, pages_to=filters.pages_to) }}">{{ p }}</a>
+                {% endif %}
+            {% else %}
+                <span class="page-link">…</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+            <a class="page-link" href="{{ url_for('main.index', page=pagination.next_num, title=filters.title, author=filters.author, genre=filters.genre, year=filters.year, pages_from=filters.pages_from, pages_to=filters.pages_to) }}">›</a>
+        {% else %}
+            <span class="page-link disabled">›</span>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

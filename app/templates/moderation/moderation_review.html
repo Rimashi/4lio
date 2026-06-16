@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Рассмотрение рецензии{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('moderation.moderation') }}" class="breadcrumb__item">Модерация</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__item breadcrumb__item--active">Рецензия #{{ review.id }}</span>
+    </nav>
+
+    <div class="modreview-layout">
+        <div class="modreview-card">
+            <div class="modreview-card__header">
+                <div class="review__avatar">{{ review.user.short_name[0] }}</div>
+                <div>
+                    <p class="modreview-card__author">{{ review.user.full_name }}</p>
+                    <p class="text-muted" style="font-size:13px;">{{ review.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                </div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+                    <span class="stars">{% for i in range(5) %}{% if i < review.rating %}★{% else %}☆{% endif %}{% endfor %}</span>
+                    <strong>{{ review.rating }} — {{ ['Ужасно','Плохо','Удовлетворительно','Хорошо','Отлично'][review.rating] }}</strong>
+                </div>
+            </div>
+            <div class="modreview-card__book">
+                <div class="modreview-book-cover"></div>
+                <div>
+                    <p style="font-size:13px;color:var(--text-muted)">Книга</p>
+                    <a href="{{ url_for('books.book', book_id=review.book.id) }}" class="link-accent" style="font-weight:600;">{{ review.book.title }}</a>
+                    <p style="font-size:13px;color:var(--text-muted)">{{ review.book.author }} · {{ review.book.year }}</p>
+                </div>
+            </div>
+            <div class="modreview-card__text">{{ review.text_html|safe }}</div>
+            <div class="modreview-card__actions">
+                <a href="{{ url_for('moderation.moderation') }}" class="btn btn-ghost">Назад к списку</a>
+                <div style="display:flex;gap:10px;margin-left:auto;">
+                    <form method="post" action="{{ url_for('moderation.review_reject', review_id=review.id) }}">
+                        <button type="submit" class="btn btn-danger">Отклонить</button>
+                    </form>
+                    <form method="post" action="{{ url_for('moderation.review_approve', review_id=review.id) }}">
+                        <button type="submit" class="btn btn-primary" style="background:var(--success-text);border-color:var(--success-text);">Одобрить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

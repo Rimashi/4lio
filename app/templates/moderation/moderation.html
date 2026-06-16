@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Модерация рецензий{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <div class="page-head">
+        <h1 class="title-xl">Модерация рецензий</h1>
+        <span class="badge badge-warning" style="font-size:14px; padding:6px 14px;">{{ reviews|length }} на рассмотрении</span>
+    </div>
+
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead><tr><th>№</th><th>Книга</th><th>Пользователь</th><th>Оценка</th><th>Дата</th><th></th></tr></thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td class="text-muted">{{ loop.index }}</td>
+                    <td><a href="{{ url_for('books.book', book_id=review.book.id) }}" class="link-accent">{{ review.book.title }}</a></td>
+                    <td>{{ review.user.full_name }}</td>
+                    <td><span class="stars" style="font-size:12px">{% for i in range(5) %}{% if i < review.rating %}★{% else %}☆{% endif %}{% endfor %}</span> {{ review.rating }}</td>
+                    <td class="text-muted">{{ review.created_at.strftime('%d.%m.%Y') }}</td>
+                    <td><a href="{{ url_for('moderation.moderation_review', review_id=review.id) }}" class="btn btn-outline btn-sm">Рассмотреть</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px 0;">Нет рецензий на модерацию</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <nav class="pagination">
+        {% if pagination.has_prev %}
+            <a class="page-link" href="{{ url_for('moderation.moderation', page=pagination.prev_num) }}">‹</a>
+        {% else %}
+            <span class="page-link disabled">‹</span>
+        {% endif %}
+        {% for p in pagination.iter_pages() %}
+            {% if p %}
+                {% if p == pagination.page %}
+                    <span class="page-link active">{{ p }}</span>
+                {% else %}
+                    <a class="page-link" href="{{ url_for('moderation.moderation', page=p) }}">{{ p }}</a>
+                {% endif %}
+            {% else %}
+                <span class="page-link">…</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+            <a class="page-link" href="{{ url_for('moderation.moderation', page=pagination.next_num) }}">›</a>
+        {% else %}
+            <span class="page-link disabled">›</span>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}

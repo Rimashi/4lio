@@ -1,0 +1,206 @@
+/* ================================================
+   Стили хедера и футера (подключается через main.css или отдельно)
+   ================================================ */
+
+/* ====== HEADER ====== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-light);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.header__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 24px;
+  height: 100%;
+}
+
+/* Логотип */
+.header__logo {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.header__logo-4 {
+  color: var(--accent-color);
+}
+
+.header__logo-lio {
+  color: var(--text-color);
+}
+
+/* Навигация */
+.header__menu {
+  flex: 1;
+}
+
+.menu__list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.menu__link {
+  display: block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.menu__link:hover,
+.menu__link.active {
+  color: var(--text-color);
+  background: var(--surface);
+}
+
+.menu__link.active {
+  color: var(--accent-color);
+  background: var(--accent-bg);
+}
+
+/* Правая часть */
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header__username {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Кнопка темы */
+#themeToggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+#themeToggle:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+  background: var(--accent-bg);
+}
+
+/* ====== FOOTER ====== */
+.footer {
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 28px 0;
+  margin-top: auto;
+}
+
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer__logo {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.footer__logo-fo {
+  color: var(--footer-text);
+  opacity: 0.9;
+}
+
+.footer__logo-4 {
+  color: var(--accent-color);
+}
+
+.footer__logo-io {
+  color: var(--footer-text);
+  opacity: 0.5;
+}
+
+.footer__copy {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.footer__author {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+/* ====== АДАПТИВ ====== */
+@media (max-width: 768px) {
+  .header__menu {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 75%;
+    max-width: 280px;
+    height: calc(100vh - var(--header-height));
+    background: var(--block-bg);
+    border-right: 1px solid var(--border-color);
+    z-index: 99;
+    padding: 16px;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .header__menu.active {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .menu__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .menu__link {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .header__username {
+    display: none;
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

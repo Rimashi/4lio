@@ -1,0 +1,364 @@
+/* ================================================
+   Форма добавления / редактирования книги
+   ================================================ */
+
+/* Хлебные крошки */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+.breadcrumb__item {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.breadcrumb__item:hover {
+  color: var(--accent-color);
+}
+.breadcrumb__item--active {
+  color: var(--text-color);
+  font-weight: 500;
+}
+.breadcrumb__sep {
+  color: var(--text-light);
+}
+
+/* ====== ЛЕЙАУТ ФОРМЫ ====== */
+.book-form-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ====== КАРТОЧКА ФОРМЫ ====== */
+.form-card {
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 16px;
+}
+
+.form-card:last-child {
+  margin-bottom: 0;
+}
+
+.form-card__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.form-card__title--sm {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+}
+
+.form-card--actions {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ====== ОШИБКА ФОРМЫ ====== */
+.form-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.form-alert--error {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-text);
+}
+
+.form-alert svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ====== ДВА ПОЛЯ В РЯД ====== */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ====== МУЛЬТИСЕЛЕКТ ЖАНРОВ ====== */
+.multiselect {
+  position: relative;
+}
+
+.multiselect__selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--block-bg);
+  cursor: text;
+  min-height: 42px;
+  align-items: center;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.multiselect__selected:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(239, 159, 39, 0.15);
+}
+
+.dark-theme .multiselect__selected:focus-within {
+  box-shadow: 0 0 0 3px rgba(216, 90, 48, 0.2);
+}
+
+.multiselect__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 10px;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.multiselect__tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-text);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.multiselect__tag-remove:hover {
+  opacity: 1;
+}
+
+.multiselect__input {
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 14px;
+  color: var(--text-color);
+  flex: 1;
+  min-width: 100px;
+  padding: 2px 4px;
+}
+
+.multiselect__input::placeholder {
+  color: var(--text-light);
+}
+
+/* Дропдаун */
+.multiselect__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--block-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.multiselect__option {
+  padding: 9px 14px;
+  font-size: 14px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.multiselect__option:hover {
+  background: var(--surface);
+}
+
+.multiselect__option.selected {
+  color: var(--accent-color);
+  background: var(--accent-bg);
+  font-weight: 500;
+}
+
+.multiselect__option.hidden {
+  display: none;
+}
+
+/* ====== MARKDOWN РЕДАКТОР ====== */
+.EasyMDEContainer {
+  margin-top: 2px;
+}
+
+.EasyMDEContainer .CodeMirror {
+  background: var(--block-bg);
+  color: var(--text-color);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.EasyMDEContainer .CodeMirror-focused {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(239, 159, 39, 0.15);
+}
+
+.dark-theme .EasyMDEContainer .CodeMirror-focused {
+  box-shadow: 0 0 0 3px rgba(216, 90, 48, 0.2);
+}
+
+.editor-toolbar {
+  background: var(--surface);
+  border: 1.5px solid var(--border-color);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  opacity: 1;
+}
+
+.editor-toolbar button {
+  color: var(--text-muted) !important;
+}
+
+.editor-toolbar button:hover,
+.editor-toolbar button.active {
+  background: var(--accent-bg) !important;
+  color: var(--accent-color) !important;
+  border-color: transparent !important;
+}
+
+.editor-toolbar i.separator {
+  border-color: var(--border-color) !important;
+}
+
+.editor-preview {
+  background: var(--block-bg);
+  color: var(--text-color);
+}
+
+/* ====== ПРЕВЬЮ ОБЛОЖКИ ====== */
+.cover-preview {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  margin-bottom: 14px;
+  border: 1px solid var(--border-light);
+}
+
+.cover-preview__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-light);
+  font-size: 13px;
+  background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+}
+
+.cover-preview__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ====== ЗАГРУЗКА ОБЛОЖКИ ====== */
+.cover-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cover-upload__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ====== ТЕКУЩАЯ ОБЛОЖКА (режим редактирования) ====== */
+.cover-current {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cover-current__text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--success-text);
+}
+
+/* ====== АДАПТИВ ====== */
+@media (max-width: 900px) {
+  .book-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .book-form-sidebar {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .cover-preview {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .book-form-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-preview {
+    max-width: 180px;
+    margin: 0 auto 14px;
+  }
+
+  .form-card {
+    padding: 20px 16px;
+  }
+
+  .form-row-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

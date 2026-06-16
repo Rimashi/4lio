@@ -1,0 +1,520 @@
+/* ================================================
+   Главная страница: каталог книг
+   уже не особо главная, но пусть будет index.css
+   ================================================ */
+
+/* ====== ШАПКА КАТАЛОГА ====== */
+.catalog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+/* ====== СЕТКА КАРТОЧЕК ====== */
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* ====== КАРТОЧКА КНИГИ ====== */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.book-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Обложка */
+.book-card__cover-wrap {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.book-card__cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-card__cover-wrap img {
+  transform: scale(1.03);
+}
+
+.book-card__cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+}
+
+/* Тело карточки */
+.book-card__body {
+  flex: 1;
+  padding: 12px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.book-card__genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.book-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.book-card__title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.book-card__title a:hover {
+  color: var(--accent-color);
+}
+
+.book-card__author {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.book-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.book-card__year {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+.book-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.book-card__rating .stars {
+  font-size: 12px;
+}
+
+.book-card__rating-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.book-card__reviews {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-left: auto;
+}
+
+/* Кнопки действий */
+.book-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--border-light);
+  background: var(--surface);
+}
+
+.book-card__actions .btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border-color: transparent;
+}
+
+.book-card__actions .btn-icon:hover {
+  color: var(--accent-color);
+  background: var(--accent-bg);
+  border-color: transparent;
+}
+
+.book-card__actions .btn-danger-hover:hover {
+  color: var(--danger-text);
+  background: var(--danger-bg);
+}
+
+/* ====== АДАПТИВ ====== */
+@media (max-width: 1024px) {
+  .catalog__grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .catalog__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .catalog__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .book-card__reviews {
+    display: none;
+  }
+}
+
+/* ====== ШАПКА СЕКЦИЙ ====== */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-head__title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-head__badge {
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ====== НЕДАВНО ПРОСМОТРЕННЫЕ ====== */
+.recently-viewed {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.recently-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.recently-item {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  flex-shrink: 0;
+  max-width: 300px;
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.recently-item:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.recently-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.recently-item__cover {
+  width: 32px;
+  height: 44px;
+  border-radius: 3px;
+  background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+  flex-shrink: 0;
+  border: 1px solid var(--border-light);
+}
+
+.recently-item__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recently-item__meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ====== ПОПУЛЯРНЫЕ КНИГИ ====== */
+.popular-books {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.popular-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.popular-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.15s;
+}
+
+.popular-item:last-child {
+  border-bottom: none;
+}
+.popular-item:hover {
+  background: var(--surface);
+}
+
+.popular-item__rank {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-color);
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.popular-item:nth-child(1) .popular-item__rank {
+  color: #ef9f27;
+}
+.popular-item:nth-child(2) .popular-item__rank {
+  color: #888780;
+}
+.popular-item:nth-child(3) .popular-item__rank {
+  color: #b08046;
+}
+
+.popular-item__cover {
+  width: 36px;
+  height: 50px;
+  border-radius: 3px;
+  background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+  flex-shrink: 0;
+  border: 1px solid var(--border-light);
+}
+
+.popular-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.popular-item__title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popular-item__meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.popular-item__stars {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* ====== ФИЛЬТР ====== */
+.catalog-filter {
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+
+.catalog-filter__fields {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.catalog-filter__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.catalog-filter__range {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.catalog-filter__range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.catalog-filter__range-sep {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.catalog-filter__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.catalog-filter__input {
+  font-size: 14px;
+  padding: 7px 12px;
+}
+
+.catalog-filter__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Теги активных фильтров */
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.filter-tag__remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-text);
+  font-size: 15px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.filter-tag__remove:hover {
+  opacity: 1;
+}
+
+/* Строка результатов */
+.catalog-results {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Пустой поиск */
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .catalog-filter__fields {
+    gap: 8px;
+  }
+  .catalog-filter__field {
+    min-width: 100%;
+  }
+  .catalog-filter__range {
+    width: 100%;
+  }
+  .recently-list {
+    gap: 8px;
+  }
+  .popular-item__stars {
+    display: none;
+  }
+}

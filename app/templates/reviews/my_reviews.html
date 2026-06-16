@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Мои рецензии{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <div class="page-head">
+        <h1 class="title-xl">Мои рецензии</h1>
+        <span class="page-head__count">{{ reviews|length }} рецензий</span>
+    </div>
+
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr><th>Книга</th><th>Оценка</th><th>Статус</th><th>Дата</th><th>Рецензия</th></tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('books.book', book_id=review.book.id) }}" class="table-book-link">
+                            <div class="table-book-cover"></div>
+                            <div>
+                                <p class="table-book-title">{{ review.book.title }}</p>
+                                <p class="table-book-author">{{ review.book.author }}</p>
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <span class="stars" style="font-size:13px">{% for i in range(5) %}{% if i < review.rating %}★{% else %}☆{% endif %}{% endfor %}</span>
+                        <strong>{{ review.rating }}</strong>
+                    </td>
+                    <td>
+                        {% if review.status.name == 'Одобрена' %}
+                            <span class="badge badge-success">Одобрена</span>
+                        {% elif review.status.name == 'На рассмотрении' %}
+                            <span class="badge badge-warning">На рассмотрении</span>
+                        {% else %}
+                            <span class="badge badge-danger">Отклонена</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted">{{ review.created_at.strftime('%d.%m.%Y') }}</td>
+                    <td><p class="table-review-text">{{ review.text|striptags|truncate(80) }}</p></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-muted" style="text-align:center;padding:40px 0;">Вы ещё не написали ни одной рецензии.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

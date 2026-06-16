@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Написать рецензию{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/write_review.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('main.index') }}" class="breadcrumb__item">Каталог</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="{{ url_for('books.book', book_id=book.id) }}" class="breadcrumb__item">{{ book.title }}</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__item breadcrumb__item--active">Написать рецензию</span>
+    </nav>
+
+    <div class="review-write-layout">
+        <div class="review-book-info">
+            <div class="review-book-info__cover"></div>
+            <div>
+                <p class="review-book-info__label">Вы пишете рецензию на книгу</p>
+                <h2 class="review-book-info__title">{{ book.title }}</h2>
+                <p class="review-book-info__author">{{ book.author }} · {{ book.year }}</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <div class="form-alert form-alert--error" id="reviewFormError" hidden>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                При сохранении рецензии возникла ошибка. Проверьте заполненные поля.
+            </div>
+
+            <form id="writeReviewForm" method="post" action="{{ url_for('reviews.submit_review', book_id=book.id) }}" novalidate>
+                <div class="form-group">
+                    <label class="form-label">Оценка <span class="required">*</span></label>
+                    <div class="star-rating" id="starRating">
+                        <button type="button" class="star-rating__star" data-value="5" title="5 — Отлично">★</button>
+                        <button type="button" class="star-rating__star" data-value="4" title="4 — Хорошо">★</button>
+                        <button type="button" class="star-rating__star" data-value="3" title="3 — Удовлетворительно">★</button>
+                        <button type="button" class="star-rating__star" data-value="2" title="2 — Неудовлетворительно">★</button>
+                        <button type="button" class="star-rating__star" data-value="1" title="1 — Плохо">★</button>
+                    </div>
+                    <p class="star-rating__label" id="starLabel">Выберите оценку</p>
+                    <input type="hidden" name="rating" id="ratingValue">
+                    <p class="form-error" id="ratingError" hidden>Выберите оценку</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reviewText">Текст рецензии <span class="required">*</span></label>
+                    <textarea id="reviewText" name="text" placeholder="Поделитесь впечатлениями о книге..."></textarea>
+                    <p class="form-hint">Поддерживается Markdown-форматирование</p>
+                    <p class="form-error" id="reviewTextError" hidden>Напишите текст рецензии</p>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+                    <a href="{{ url_for('books.book', book_id=book.id) }}" class="btn btn-ghost">Отмена</a>
+                    <button type="submit" class="btn btn-primary">Сохранить рецензию</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="{{ url_for('static', filename='js/write_review.js') }}"></script>
+{% endblock %}

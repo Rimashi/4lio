@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}folio{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <div class="_container header__inner">
+                <a href="{{ url_for('main.index') }}" class="header__logo">
+                    <span class="header__logo-4">4</span><span class="header__logo-lio">lio</span>
+                </a>
+                <nav class="header__menu">
+                    <ul class="menu__list">
+                        <li><a href="{{ url_for('main.index') }}" class="menu__link {% if request.endpoint == 'main.index' %}active{% endif %}">Каталог</a></li>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.role.name == 'Пользователь' %}
+                                <li><a href="{{ url_for('reviews.my_reviews') }}" class="menu__link {% if request.endpoint == 'reviews.my_reviews' %}active{% endif %}">Мои рецензии</a></li>
+                                <li><a href="{{ url_for('collections.my_collections') }}" class="menu__link {% if request.endpoint == 'collections.my_collections' %}active{% endif %}">Мои подборки</a></li>
+                            {% endif %}
+                            {% if current_user.role.name in ('Модератор', 'Администратор') %}  <!-- ← добавлено -->
+                                <li><a href="{{ url_for('moderation.moderation') }}" class="menu__link {% if request.endpoint == 'moderation.moderation' %}active{% endif %}">Модерация</a></li>
+                            {% endif %}
+                            {% if current_user.role.name == 'Администратор' %}
+                                <li><a href="{{ url_for('profile.stats') }}" class="menu__link {% if request.endpoint == 'profile.stats' %}active{% endif %}">Статистика</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+                <div class="header__right">
+                    <button class="btn btn-ghost btn-icon" id="themeToggle" aria-label="Тёмная тема"></button>
+                    {% if current_user.is_authenticated %}
+                        <div class="header__user">
+                            <a href="{{ url_for('profile.profile') }}" class="header__username">{{ current_user.short_name }}</a>
+                            <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-sm">Выйти</a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-sm">Войти</a>
+                    {% endif %}
+                    <button class="menu__icon" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+                </div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main class="main">{% block content %}{% endblock %}</main>
+
+        <footer class="footer">
+            <div class="_container footer__inner">
+                <a href="{{ url_for('main.index') }}" class="footer__logo">
+                    <span class="footer__logo-4">4</span><span class="footer__logo-lio">lio</span>
+                </a>
+                <p class="footer__copy">Электронная библиотека — учебный проект</p>
+                <p class="footer__author">Группа № _____ · Фамилия Имя Отчество</p>
+            </div>
+        </footer>
+    </div>
+    <div id="menu_overlay"></div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

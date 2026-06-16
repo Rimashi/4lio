@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from 'macros/book_card.html' import book_card with context %}
+{% block title %}{{ collection.name }}{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/collection.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('collections.my_collections') }}" class="breadcrumb__item">Мои подборки</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__item breadcrumb__item--active">{{ collection.name }}</span>
+    </nav>
+
+    <div class="collection-page-head">
+        <div>
+            <h1 class="title-xl">{{ collection.name }}</h1>
+            <p class="text-muted">{{ collection.books|length }} книг · создана {{ collection.id }}</p>
+        </div>
+        <form method="post" action="{{ url_for('collections.delete_collection', col_id=collection.id) }}" onsubmit="return confirm('Удалить подборку?');">
+            <button type="submit" class="btn btn-danger btn-sm">Удалить подборку</button>
+        </form>
+    </div>
+
+    <div class="catalog__grid">
+        {% for book in collection.books %}
+            {% from 'macros/book_card.html' import book_card %}
+            {{ book_card(book, show_actions=false, show_collection_remove=true) }}
+        {% else %}
+            <div class="collection-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <p>В подборке пока нет книг</p>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline">Перейти в каталог</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}История просмотров{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('profile.profile') }}" class="breadcrumb__item">Профиль</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__item breadcrumb__item--active">История просмотров</span>
+    </nav>
+
+    <div class="page-head">
+        <h1 class="title-xl">История просмотров</h1>
+        <form method="post" action="{{ url_for('profile.clear_history') }}" onsubmit="return confirm('Очистить всю историю?');">
+            <button type="submit" class="btn btn-ghost btn-sm">Очистить историю</button>
+        </form>
+    </div>
+
+    {% if records %}
+        <div class="history-groups">
+            {% for group in records|groupby('viewed_at.strftime(%d.%m.%Y)') %}
+            <div class="history-group">
+                <h2 class="history-group__date">{{ group.grouper }}</h2>
+                <div class="history-list">
+                    {% for record in group.list %}
+                    <a href="{{ url_for('books.book', book_id=record.book.id) }}" class="history-item">
+                        <div class="history-item__cover"></div>
+                        <div class="history-item__info">
+                            <p class="history-item__title">{{ record.book.title }}</p>
+                            <p class="history-item__author">{{ record.book.author }}</p>
+                            <div class="history-item__meta">
+                                <span class="badge badge-muted" style="font-size:11px;">{{ record.book.genres[0].name if record.book.genres else '' }}</span>
+                                <span class="stars" style="font-size:12px;">{% for i in range(5) %}{% if i < (record.book.avg_rating|int|default(0)) %}★{% else %}☆{% endif %}{% endfor %}</span>
+                            </div>
+                        </div>
+                        <span class="history-item__time">{{ record.viewed_at.strftime('%H:%M') }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align:center;padding:60px 20px;color:var(--text-muted);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>История просмотров пуста</p>
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline" style="margin-top:16px;">Перейти в каталог</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

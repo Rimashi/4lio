@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Вход — folio{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+{% block content %}
+<div class="auth-main">
+    <div class="auth-card">
+        <div class="auth-card__logo">
+            <span class="auth-logo-4">4</span><span class="auth-logo-lio">lio</span>
+        </div>
+        <p class="auth-card__subtitle">Электронная библиотека</p>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Вход</button>
+            <button class="auth-tab" data-tab="register">Регистрация</button>
+        </div>
+
+        <div class="auth-error" id="authError" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="authErrorText">Невозможно аутентифицироваться с указанными логином и паролем</span>
+        </div>
+
+        <!-- Форма входа -->
+        <form class="auth-form" id="loginForm" method="post" action="{{ url_for('auth.login') }}" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="loginUsername">Логин <span class="required">*</span></label>
+                <input class="form-control" type="text" id="loginUsername" name="username" placeholder="Введите логин" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="loginPassword">Пароль <span class="required">*</span></label>
+                <div class="input-password">
+                    <input class="form-control" type="password" id="loginPassword" name="password" placeholder="Введите пароль" autocomplete="current-password" required>
+                    <button type="button" class="input-password__toggle" aria-label="Показать пароль">
+                        <svg class="eye-show" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg class="eye-hide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="auth-form__remember">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="rememberMe" name="remember">
+                    <span class="checkbox-custom"></span>
+                    Запомнить меня
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg">Войти</button>
+        </form>
+
+        <!-- Форма регистрации -->
+        <form class="auth-form" id="registerForm" method="post" action="{{ url_for('auth.register') }}" novalidate hidden>
+            <div class="auth-form__row">
+                <div class="form-group">
+                    <label class="form-label" for="regLastName">Фамилия <span class="required">*</span></label>
+                    <input class="form-control" type="text" id="regLastName" name="last_name" placeholder="Иванов" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="regFirstName">Имя <span class="required">*</span></label>
+                    <input class="form-control" type="text" id="regFirstName" name="first_name" placeholder="Иван" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="regMiddleName">Отчество</label>
+                <input class="form-control" type="text" id="regMiddleName" name="middle_name" placeholder="Иванович (необязательно)">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="regUsername">Логин <span class="required">*</span></label>
+                <input class="form-control" type="text" id="regUsername" name="username" placeholder="Придумайте логин" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="regPassword">Пароль <span class="required">*</span></label>
+                <div class="input-password">
+                    <input class="form-control" type="password" id="regPassword" name="password" placeholder="Минимум 6 символов" autocomplete="new-password" required minlength="6">
+                    <button type="button" class="input-password__toggle" aria-label="Показать пароль">
+                        <svg class="eye-show" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg class="eye-hide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="regPasswordConfirm">Повторите пароль <span class="required">*</span></label>
+                <div class="input-password">
+                    <input class="form-control" type="password" id="regPasswordConfirm" name="password_confirm" placeholder="Повторите пароль" autocomplete="new-password" required>
+                    <button type="button" class="input-password__toggle" aria-label="Показать пароль">
+                        <svg class="eye-show" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg class="eye-hide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+                <p class="form-error" id="passwordMismatch" hidden>Пароли не совпадают</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg">Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

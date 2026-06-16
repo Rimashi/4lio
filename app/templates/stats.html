@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Статистика{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stats.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <div class="page-head">
+        <h1 class="title-xl">Статистика</h1>
+    </div>
+
+    <div class="stats-tabs">
+        <button class="stats-tab active" data-tab="log">Журнал действий</button>
+        <button class="stats-tab" data-tab="views">Статистика просмотров</button>
+    </div>
+
+    <!-- Журнал -->
+    <div class="stats-panel" id="tabLog">
+        <div class="stats-panel__toolbar">
+            <p class="text-muted" style="font-size:13px;">Все просмотры страниц книг</p>
+            <a href="{{ url_for('profile.export_log_csv') }}" class="btn btn-outline btn-sm">Экспорт в CSV</a>
+        </div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead><tr><th>№</th><th>Пользователь</th><th>Книга</th><th>Дата и время</th></tr></thead>
+                <tbody>
+                    {% for record in log_pagination.items %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index + (log_pagination.page - 1) * log_pagination.per_page }}</td>
+                        <td>{{ record.user.full_name if record.user else 'Неаутентифицированный' }}</td>
+                        <td><a href="{{ url_for('books.book', book_id=record.book.id) }}" class="link-accent">{{ record.book.title }}</a></td>
+                        <td class="text-muted">{{ record.viewed_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="text-muted" style="text-align:center;">Нет записей</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav class="pagination">
+            {% if log_pagination.has_prev %}<a class="page-link" href="{{ url_for('profile.stats', page=log_pagination.prev_num, tab='log') }}">‹</a>{% else %}<span class="page-link disabled">‹</span>{% endif %}
+            {% for p in log_pagination.iter_pages() %}{% if p %}{% if p == log_pagination.page %}<span class="page-link active">{{ p }}</span>{% else %}<a class="page-link" href="{{ url_for('profile.stats', page=p, tab='log') }}">{{ p }}</a>{% endif %}{% else %}<span class="page-link">…</span>{% endif %}{% endfor %}
+            {% if log_pagination.has_next %}<a class="page-link" href="{{ url_for('profile.stats', page=log_pagination.next_num, tab='log') }}">›</a>{% else %}<span class="page-link disabled">›</span>{% endif %}
+        </nav>
+    </div>
+
+    <!-- Просмотры -->
+    <div class="stats-panel" id="tabViews" hidden>
+        <div class="stats-panel__toolbar">
+            <form class="stats-daterange" method="get" action="{{ url_for('profile.stats') }}">
+                <input type="hidden" name="tab" value="views">
+                <div class="stats-daterange__fields">
+                    <div class="stats-daterange__field">
+                        <label class="form-label" for="dateFrom">С</label>
+                        <input class="form-control form-control--sm" type="date" id="dateFrom" name="date_from" value="{{ date_from or '' }}">
+                    </div>
+                    <div class="stats-daterange__field">
+                        <label class="form-label" for="dateTo">По</label>
+                        <input class="form-control form-control--sm" type="date" id="dateTo" name="date_to" value="{{ date_to or '' }}">
+                    </div>
+                    <button type="submit" class="btn btn-outline btn-sm">Применить</button>
+                </div>
+            </form>
+            <a href="{{ url_for('profile.export_views_csv') }}" class="btn btn-outline btn-sm">Экспорт в CSV</a>
+        </div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead><tr><th>№</th><th>Книга</th><th>Просмотры</th><th></th></tr></thead>
+                <tbody>
+                    {% for book, views in views_pagination.items %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index + (views_pagination.page - 1) * views_pagination.per_page }}</td>
+                        <td><a href="{{ url_for('books.book', book_id=book.id) }}" class="link-accent">{{ book.title }}</a></td>
+                        <td><strong>{{ views }}</strong></td>
+                        <td><div class="stats-bar"><div class="stats-bar__fill" style="width: {{ (views / max_views * 100) if max_views else 0 }}%;"></div></div></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="text-muted" style="text-align:center;">Нет данных</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav class="pagination">
+            {% if views_pagination.has_prev %}<a class="page-link" href="{{ url_for('profile.stats', page=views_pagination.prev_num, tab='views', date_from=date_from, date_to=date_to) }}">‹</a>{% else %}<span class="page-link disabled">‹</span>{% endif %}
+            {% for p in views_pagination.iter_pages() %}{% if p %}{% if p == views_pagination.page %}<span class="page-link active">{{ p }}</span>{% else %}<a class="page-link" href="{{ url_for('profile.stats', page=p, tab='views', date_from=date_from, date_to=date_to) }}">{{ p }}</a>{% endif %}{% else %}<span class="page-link">…</span>{% endif %}{% endfor %}
+            {% if views_pagination.has_next %}<a class="page-link" href="{{ url_for('profile.stats', page=views_pagination.next_num, tab='views', date_from=date_from, date_to=date_to) }}">›</a>{% else %}<span class="page-link disabled">›</span>{% endif %}
+        </nav>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
+{% endblock %}

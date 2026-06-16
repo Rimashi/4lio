@@ -1,0 +1,199 @@
+/* ================================================
+   Страницы входа и регистрации
+   ================================================ */
+
+.auth-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+/* ====== КАРТОЧКА ====== */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 36px 40px 40px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Логотип */
+.auth-card__logo {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.auth-logo-4 {
+  color: var(--accent-color);
+}
+.auth-logo-lio {
+  color: var(--text-color);
+}
+
+.auth-card__subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ====== ТАБЫ ====== */
+.auth-tabs {
+  display: flex;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-bottom: 24px;
+  gap: 2px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-tab:hover {
+  color: var(--text-color);
+}
+
+.auth-tab.active {
+  background: var(--block-bg);
+  color: var(--accent-color);
+  box-shadow: 0 1px 4px var(--shadow-color);
+}
+
+/* ====== ОШИБКА ====== */
+.auth-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 11px 14px;
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-text);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.auth-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ====== ФОРМА ====== */
+.auth-form .form-group {
+  margin-bottom: 16px;
+}
+
+/* Два поля в ряд */
+.auth-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Чекбокс "Запомнить меня" */
+.auth-form__remember {
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--block-bg);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox-label input:checked + .checkbox-custom {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.checkbox-label input:checked + .checkbox-custom::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* ====== ПОЛЕ С ПАРОЛЕМ ====== */
+.input-password {
+  position: relative;
+}
+
+.input-password .form-control {
+  padding-right: 42px;
+}
+
+.input-password__toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: color 0.2s;
+}
+
+.input-password__toggle:hover {
+  color: var(--accent-color);
+}
+
+/* ====== АДАПТИВ ====== */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 20px 32px;
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-form__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

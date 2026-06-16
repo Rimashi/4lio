@@ -1,0 +1,421 @@
+/* ================================================
+   Страница просмотра книги
+   ================================================ */
+
+/* ====== ХЛЕБНЫЕ КРОШКИ ====== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+
+.breadcrumb__item {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb__item:hover {
+  color: var(--accent-color);
+}
+
+.breadcrumb__item--active {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.breadcrumb__sep {
+  color: var(--text-light);
+}
+
+/* ====== ОСНОВНОЙ БЛОК КНИГИ ====== */
+.book {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+/* ====== САЙДБАР ====== */
+.book__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: calc(var(--header-height) + 20px);
+}
+
+.book__cover-wrap {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.book__cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.book__cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  background: linear-gradient(145deg, var(--surface), var(--surface-hover));
+}
+
+/* Рейтинг под обложкой */
+.book__rating-big {
+  text-align: center;
+  padding: 12px;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.book__rating-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent-color);
+  line-height: 1;
+}
+
+.book__stars {
+  font-size: 18px;
+}
+
+.book__rating-count {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Кнопки сайдбара */
+.book__sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ====== КОНТЕНТ КНИГИ ====== */
+.book__content {
+  min-width: 0;
+}
+
+.book__genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.book__title {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.book__author {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Метаданные */
+.book__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.book__meta-row {
+  display: flex;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.book__meta-row:last-child {
+  border-bottom: none;
+}
+
+.book__meta-row dt {
+  width: 140px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.book__meta-row dd {
+  color: var(--text-color);
+}
+
+/* Описание */
+.book__section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.book__description-text {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-color);
+}
+
+.book__description-text p {
+  margin-bottom: 12px;
+}
+
+.book__description-text p:last-child {
+  margin-bottom: 0;
+}
+
+.book__description-text strong {
+  font-weight: 600;
+}
+
+.book__description-text em {
+  font-style: italic;
+}
+
+.book__description-text blockquote {
+  border-left: 3px solid var(--accent-color);
+  padding: 8px 16px;
+  margin: 16px 0;
+  color: var(--text-muted);
+  font-style: italic;
+  background: var(--surface);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ====== РЕЦЕНЗИИ ====== */
+.reviews {
+  border-top: 1px solid var(--border-light);
+  padding-top: 32px;
+}
+
+.reviews__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.reviews__head .book__section-title {
+  margin-bottom: 0;
+}
+
+.reviews__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Форма рецензии */
+.review-form {
+  background: var(--block-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.review-form__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 16px;
+}
+
+.review-form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* Список рецензий */
+.reviews__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Карточка рецензии */
+.review {
+  background: var(--block-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+}
+
+.review:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.review--pending {
+  border-color: var(--border-color);
+  opacity: 0.85;
+}
+
+.review__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.review__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.review__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.review__author {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.review__date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.review__rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.review__score {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.review__status {
+  font-size: 11px;
+}
+
+.review__body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-color);
+}
+
+.review__body p {
+  margin-bottom: 8px;
+}
+
+.review__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ====== АДАПТИВ ====== */
+@media (max-width: 860px) {
+  .book {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .book__sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .book__cover-wrap {
+    grid-row: 1 / 4;
+  }
+
+  .book__rating-big {
+    align-self: start;
+  }
+
+  .book__sidebar-actions {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .book__sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .book__cover-wrap {
+    grid-row: auto;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .review__rating {
+    margin-left: 0;
+  }
+
+  .reviews__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

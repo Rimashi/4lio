@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}{% if book %}Редактирование{% else %}Добавление{% endif %} книги{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book_form.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+{% endblock %}
+{% block content %}
+<div class="_container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('main.index') }}" class="breadcrumb__item">Каталог</a>
+        <span class="breadcrumb__sep">›</span>
+        {% if book %}
+            <a href="{{ url_for('books.book', book_id=book.id) }}" class="breadcrumb__item">{{ book.title }}</a>
+            <span class="breadcrumb__sep">›</span>
+            <span class="breadcrumb__item breadcrumb__item--active">Редактирование</span>
+        {% else %}
+            <span class="breadcrumb__item breadcrumb__item--active">Новая книга</span>
+        {% endif %}
+    </nav>
+
+    <div class="book-form-layout">
+        <div class="book-form-main">
+            <div class="form-card">
+                <h1 class="form-card__title">{% if book %}Редактирование книги{% else %}Добавление книги{% endif %}</h1>
+
+                <div class="form-alert form-alert--error" id="formError" hidden>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    При сохранении данных возникла ошибка. Проверьте корректность введённых данных.
+                </div>
+
+                <form id="bookForm" method="post" enctype="multipart/form-data" action="{% if book %}{{ url_for('books.book_edit', book_id=book.id) }}{% else %}{{ url_for('books.book_add') }}{% endif %}" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="bookTitle">Название <span class="required">*</span></label>
+                        <input class="form-control" type="text" id="bookTitle" name="title" value="{{ book.title if book else '' }}" placeholder="Введите название книги" required>
+                        <p class="form-error" id="bookTitleError" hidden>Поле обязательно для заполнения</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookAuthor">Автор <span class="required">*</span></label>
+                        <input class="form-control" type="text" id="bookAuthor" name="author" value="{{ book.author if book else '' }}" placeholder="Имя автора" required>
+                        <p class="form-error" id="bookAuthorError" hidden>Поле обязательно для заполнения</p>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="bookYear">Год издания <span class="required">*</span></label>
+                            <input class="form-control" type="number" id="bookYear" name="year" value="{{ book.year if book else '' }}" min="1000" max="2099" placeholder="2024" required>
+                            <p class="form-error" id="bookYearError" hidden>Укажите корректный год</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="bookPages">Объём (страниц) <span class="required">*</span></label>
+                            <input class="form-control" type="number" id="bookPages" name="pages" value="{{ book.pages if book else '' }}" min="1" placeholder="350" required>
+                            <p class="form-error" id="bookPagesError" hidden>Укажите количество страниц</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookPublisher">Издательство <span class="required">*</span></label>
+                        <input class="form-control" type="text" id="bookPublisher" name="publisher" value="{{ book.publisher if book else '' }}" placeholder="Название издательства" required>
+                        <p class="form-error" id="bookPublisherError" hidden>Поле обязательно для заполнения</p>
+                    </div>
+
+                    <!-- Жанры (мультиселект) -->
+                    <div class="form-group">
+                        <label class="form-label" for="bookGenres">Жанры <span class="required">*</span></label>
+                        <div class="multiselect" id="genreMultiselect">
+                            <div class="multiselect__selected" id="genreSelected">
+                                {% if book %}
+                                    {% for g in book.genres %}
+                                    <span class="multiselect__tag">
+                                        {{ g.name }}
+                                        <button type="button" class="multiselect__tag-remove" data-value="{{ g.id }}">×</button>
+                                    </span>
+                                    {% endfor %}
+                                {% endif %}
+                                <input class="multiselect__input" type="text" placeholder="Добавить жанр..." id="genreSearch">
+                            </div>
+                            <div class="multiselect__dropdown" id="genreDropdown" hidden>
+                                {% for g in genres %}
+                                    <div class="multiselect__option" data-value="{{ g.id }}" {% if book and g in book.genres %}selected{% endif %}>{{ g.name }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <select name="genres" id="bookGenres" multiple style="display:none">
+                            {% for g in genres %}
+                                <option value="{{ g.id }}" {% if book and g in book.genres %}selected{% endif %}>{{ g.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="form-error" id="bookGenresError" hidden>Выберите хотя бы один жанр</p>
+                    </div>
+
+                    <!-- Описание (Markdown) -->
+                    <div class="form-group">
+                        <label class="form-label" for="bookDescription">Описание <span class="required">*</span></label>
+                        <textarea id="bookDescription" name="description">{{ book.description if book else '' }}</textarea>
+                        <p class="form-hint">Поддерживается Markdown-форматирование</p>
+                        <p class="form-error" id="bookDescriptionError" hidden>Поле обязательно для заполнения</p>
+                    </div>
+
+                    <div class="form-card form-card--actions">
+                        <button type="submit" class="btn btn-primary btn-full">Сохранить книгу</button>
+                        <a href="{{ url_for('books.book', book_id=book.id) if book else url_for('main.index') }}" class="btn btn-ghost btn-full">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Сайдбар обложки -->
+        <aside class="book-form-sidebar">
+            <div class="form-card">
+                <h2 class="form-card__title form-card__title--sm">Обложка</h2>
+                <div class="cover-preview" id="coverPreview">
+                    <div class="cover-preview__placeholder" id="coverPlaceholder">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        <span>Обложка не загружена</span>
+                    </div>
+                    <img class="cover-preview__img" id="coverImg" src="" alt="Превью" hidden>
+                </div>
+                <!-- При редактировании: обложка не меняется, поэтому поле скрыто, но для единообразия оставим загрузку (можно скрыть через JS) -->
+                <div class="cover-upload" id="coverUploadBlock">
+                    <input type="file" id="coverFile" name="cover" accept="image/*" style="display:none">
+                    <button type="button" class="btn btn-outline btn-full" id="coverUploadBtn">Загрузить обложку</button>
+                    <p class="cover-upload__hint">JPG, PNG, WebP · до 5 МБ</p>
+                    <p class="form-error" id="coverError" hidden>Загрузите обложку книги</p>
+                </div>
+                {% if book and book.cover %}
+                <div class="cover-current" id="coverCurrentBlock">
+                    <p class="cover-current__text">Текущая обложка сохранена</p>
+                    <p class="form-hint">Обложка не подлежит изменению после загрузки</p>
+                </div>
+                {% endif %}
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="{{ url_for('static', filename='js/book_form.js') }}"></script>
+{% endblock %}
