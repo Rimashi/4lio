@@ -29,6 +29,9 @@
                 </div>
 
                 <form id="bookForm" method="post" enctype="multipart/form-data" action="{% if book %}{{ url_for('books.book_edit', book_id=book.id) }}{% else %}{{ url_for('books.book_add') }}{% endif %}" novalidate>
+                    {% if book %}
+                        <input type="hidden" id="bookId" name="book_id" value="{{ book.id }}">
+                    {% endif %}
                     <div class="form-group">
                         <label class="form-label" for="bookTitle">Название <span class="required">*</span></label>
                         <input class="form-control" type="text" id="bookTitle" name="title" value="{{ book.title if book else '' }}" placeholder="Введите название книги" required>
@@ -106,24 +109,43 @@
         <aside class="book-form-sidebar">
             <div class="form-card">
                 <h2 class="form-card__title form-card__title--sm">Обложка</h2>
+
+                <!-- Превью обложки -->
                 <div class="cover-preview" id="coverPreview">
-                    <div class="cover-preview__placeholder" id="coverPlaceholder">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        <span>Обложка не загружена</span>
-                    </div>
-                    <img class="cover-preview__img" id="coverImg" src="" alt="Превью" hidden>
+                    {% if book and book.cover %}
+                        <img class="cover-preview__img" id="coverImg" src="{{ url_for('static', filename='uploads/' + book.cover.filename) }}" alt="Обложка книги">
+                        <div class="cover-preview__placeholder" id="coverPlaceholder" hidden>
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                            <span>Обложка не загружена</span>
+                        </div>
+                    {% else %}
+                        <div class="cover-preview__placeholder" id="coverPlaceholder">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                            <span>Обложка не загружена</span>
+                        </div>
+                        <img class="cover-preview__img" id="coverImg" src="" alt="Превью" hidden>
+                    {% endif %}
                 </div>
-                <!-- При редактировании: обложка не меняется, поэтому поле скрыто, но для единообразия оставим загрузку (можно скрыть через JS) -->
+
+                <!-- Блок загрузки (всегда виден) -->
                 <div class="cover-upload" id="coverUploadBlock">
                     <input type="file" id="coverFile" name="cover" accept="image/*" style="display:none">
-                    <button type="button" class="btn btn-outline btn-full" id="coverUploadBtn">Загрузить обложку</button>
+                    <button type="button" class="btn btn-outline btn-full" id="coverUploadBtn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                        {% if book and book.cover %}Изменить обложку{% else %}Загрузить обложку{% endif %}
+                    </button>
                     <p class="cover-upload__hint">JPG, PNG, WebP · до 5 МБ</p>
                     <p class="form-error" id="coverError" hidden>Загрузите обложку книги</p>
                 </div>
+
+                <!-- Информация о текущей обложке (если есть) -->
                 {% if book and book.cover %}
                 <div class="cover-current" id="coverCurrentBlock">
-                    <p class="cover-current__text">Текущая обложка сохранена</p>
-                    <p class="form-hint">Обложка не подлежит изменению после загрузки</p>
+                    <p class="cover-current__text">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Текущая обложка сохранена
+                    </p>
+                    <p class="form-hint">Вы можете загрузить новую обложку, нажав на кнопку выше.</p>
                 </div>
                 {% endif %}
             </div>
@@ -133,5 +155,6 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
     <script src="{{ url_for('static', filename='js/book_form.js') }}"></script>
 {% endblock %}

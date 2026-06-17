@@ -20,7 +20,13 @@
                 <tr>
                     <td>
                         <a href="{{ url_for('books.book', book_id=review.book.id) }}" class="table-book-link">
-                            <div class="table-book-cover"></div>
+                            <div class="table-book-cover" style="width:32px;height:46px;border-radius:3px;overflow:hidden;background:var(--surface);border:1px solid var(--border-light);flex-shrink:0;">
+                                {% if review.book.cover %}
+                                    <img src="{{ url_for('static', filename='uploads/' + review.book.cover.filename) }}" alt="{{ review.book.title }}" style="width:100%;height:100%;object-fit:cover;">
+                                {% else %}
+                                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:18px;">📖</div>
+                                {% endif %}
+                            </div>
                             <div>
                                 <p class="table-book-title">{{ review.book.title }}</p>
                                 <p class="table-book-author">{{ review.book.author }}</p>

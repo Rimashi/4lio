@@ -19,7 +19,14 @@
             </div>
             <div class="collection-card__books">
                 {% for book in col.books[:4] %}
-                    <div class="collection-book-cover"></div>
+                    <div class="collection-book-cover" 
+                        style="width:52px;height:74px;border-radius:4px;overflow:hidden;flex-shrink:0;background:var(--surface);border:1px solid var(--border-light);">
+                        {% if book.cover %}
+                            <img src="{{ url_for('static', filename='uploads/' + book.cover.filename) }}" alt="{{ book.title }}" style="width:100%;height:100%;object-fit:cover;">
+                        {% else %}
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:20px;">📖</div>
+                        {% endif %}
+                    </div>
                 {% endfor %}
                 {% if col.books|length > 4 %}
                     <div class="collection-book-cover collection-book-cover--more">+{{ col.books|length - 4 }}</div>

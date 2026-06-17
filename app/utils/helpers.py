@@ -13,38 +13,50 @@ from app.models.view_history import ViewHistory
 ALLOWED_MIME = {'image/jpeg', 'image/png', 'image/webp', 'image/gif'}
 
 def save_cover(file) -> Cover | None:
-    """
-    Сохраняет файл обложки. Если MD5 уже есть — возвращает существующую запись.
-    """
+    current_app.logger.info("save_cover called")
     if not file:
+        current_app.logger.warning("File is None")
         return None
+
     data = file.read()
     md5 = hashlib.md5(data).hexdigest()
+    print(f"MD5: {md5}")
 
-    # Проверяем, нет ли уже такой обложки
     existing = Cover.query.filter_by(md5_hash=md5).first()
     if existing:
-        return existing
+        # Проверяем, существует ли файл на диске
+        upload_dir = current_app.config['UPLOAD_FOLDER']
+        filepath = os.path.join(upload_dir, existing.filename)
+        if os.path.exists(filepath):
+            print("Обложка уже существует, возвращаем существующую")
+            return existing
+        else:
+            # Файл утерян – удаляем запись и пересоздаём
+            print("Файл обложки утерян, удаляем старую запись и создаём новую")
+            db.session.delete(existing)
+            db.session.commit()
+            # Продолжаем создание новой обложки
 
     mime = file.mimetype
     if mime not in ALLOWED_MIME:
+        print(f"Неподдерживаемый MIME-тип: {mime}")
         return None
 
     cover = Cover(filename='', mime_type=mime, md5_hash=md5)
     db.session.add(cover)
-    db.session.flush()  # получаем id до commit
+    db.session.flush()
 
-    # Определяем расширение
     ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'jpg'
     filename = f'{cover.id}.{ext}'
     cover.filename = filename
 
     upload_dir = current_app.config['UPLOAD_FOLDER']
     os.makedirs(upload_dir, exist_ok=True)
-    with open(os.path.join(upload_dir, filename), 'wb') as f:
+    filepath = os.path.join(upload_dir, filename)
+    with open(filepath, 'wb') as f:
         f.write(data)
-
     db.session.commit()
+    current_app.logger.info(f"Файл сохранён: {filepath}")
     return cover
 
 def record_view(book):

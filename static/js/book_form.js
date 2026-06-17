@@ -7,14 +7,6 @@ $(function () {
   // Определяем режим: редактирование, если есть поле book_id
   const isEdit = $("#bookId").length > 0;
 
-  if (isEdit) {
-    $("#coverUploadBlock").hide();
-    $("#coverCurrentBlock").show();
-  } else {
-    $("#coverUploadBlock").show();
-    $("#coverCurrentBlock").hide();
-  }
-
   // MARKDOWN РЕДАКТОР (EasyMDE)
   const mde = new EasyMDE({
     element: document.getElementById("bookDescription"),
@@ -154,6 +146,7 @@ $(function () {
       $("#coverImg").attr("src", e.target.result).prop("hidden", false);
     };
     reader.readAsDataURL(file);
+    // Меняем текст кнопки
     $("#coverUploadBtn").html(`
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
       ${file.name}
@@ -182,11 +175,18 @@ $(function () {
   // ВАЛИДАЦИЯ И САБМИТ
   $("#bookForm").on("submit", function (e) {
     e.preventDefault();
+
+    console.log("=== SUBMIT TRIGGERED ===");
+    console.log("isEdit:", isEdit);
+    console.log("File input:", $("#coverFile")[0]);
+    console.log("File count:", $("#coverFile")[0].files.length);
+
     let valid = true;
     $(".form-error").prop("hidden", true);
     $(".form-control").removeClass("form-control--error");
     $("#formError").prop("hidden", true);
 
+    // Проверки
     if (!$("#bookTitle").val().trim()) {
       showFieldError("bookTitle", "bookTitleError");
       valid = false;
@@ -225,6 +225,7 @@ $(function () {
       );
       valid = false;
     }
+    // При создании проверяем наличие файла
     if (!isEdit && !$("#coverFile")[0].files.length) {
       $("#coverError").text("Загрузите обложку книги").prop("hidden", false);
       valid = false;
@@ -242,8 +243,54 @@ $(function () {
       return;
     }
 
-    // Если всё ок, отправляем форму
-    this.submit();
+    // Отправка через AJAX с FormData
+    const formData = new FormData(this);
+    console.log(
+      "Отправка формы с файлом:",
+      $("#coverFile")[0].files[0]
+        ? $("#coverFile")[0].files[0].name
+        : "Нет файла",
+    );
+
+    // Проверяем наличие файла в FormData и добавляем, если отсутствует
+    if (!formData.has("cover")) {
+      const fileInput = document.getElementById("coverFile");
+      if (fileInput.files.length > 0) {
+        formData.append("cover", fileInput.files[0]);
+        console.log("Файл добавлен вручную:", fileInput.files[0].name);
+      }
+    }
+
+    console.log("FormData entries:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    let apiCall;
+    if (isEdit) {
+      const bookId = $("#bookId").val();
+      apiCall = FolioAPI.updateBook(bookId, formData);
+    } else {
+      apiCall = FolioAPI.createBook(formData);
+    }
+
+    apiCall
+      .done(function (response) {
+        if (response && response.redirect) {
+          window.location.href = response.redirect;
+        } else {
+          window.location.reload();
+        }
+      })
+      .fail(function (xhr) {
+        let errorMsg =
+          "При сохранении данных возникла ошибка. Проверьте корректность введённых данных.";
+        if (xhr.responseJSON && xhr.responseJSON.error) {
+          errorMsg = xhr.responseJSON.error;
+        }
+        $("#formError").text(errorMsg);
+        $("#formError").prop("hidden", false);
+      });
   });
 
   function showFieldError(fieldId, errorId) {

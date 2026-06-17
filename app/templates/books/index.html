@@ -14,9 +14,16 @@
             <a href="{{ url_for('profile.history') }}" class="btn btn-ghost btn-sm">История</a>
         </div>
         <div class="recently-list">
+            <!-- Недавно просмотренные -->
             {% for record in recently %}
             <a href="{{ url_for('books.book', book_id=record.book.id) }}" class="recently-item">
-                <div class="recently-item__cover"></div>
+                <div class="recently-item__cover" style="width:32px;height:44px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--surface);">
+                    {% if record.book.cover %}
+                        <img src="{{ url_for('static', filename='uploads/' + record.book.cover.filename) }}" alt="{{ record.book.title }}" style="width:100%;height:100%;object-fit:cover;">
+                    {% else %}
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:16px;">📖</div>
+                    {% endif %}
+                </div>
                 <div class="recently-item__info">
                     <p class="recently-item__title">{{ record.book.title }}</p>
                     <p class="recently-item__meta">{{ record.viewed_at.strftime('%d.%m.%Y %H:%M') }}</p>
@@ -32,10 +39,17 @@
             <h2 class="section-head__title">Популярные <span class="section-head__badge">за месяц</span></h2>
         </div>
         <div class="popular-list">
+            <!-- Популярные -->
             {% for book, views in popular %}
             <a href="{{ url_for('books.book', book_id=book.id) }}" class="popular-item">
                 <span class="popular-item__rank">{{ loop.index }}</span>
-                <div class="popular-item__cover"></div>
+                <div class="popular-item__cover" style="width:36px;height:50px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--surface);">
+                    {% if book.cover %}
+                        <img src="{{ url_for('static', filename='uploads/' + book.cover.filename) }}" alt="{{ book.title }}" style="width:100%;height:100%;object-fit:cover;">
+                    {% else %}
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:18px;">📖</div>
+                    {% endif %}
+                </div>
                 <div class="popular-item__info">
                     <p class="popular-item__title">{{ book.title }}</p>
                     <p class="popular-item__meta">{{ views }} просмотров</p>
